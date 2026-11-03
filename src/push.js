@@ -28,9 +28,18 @@ let llaves = null;
 function cargarLlaves() {
   if (llaves) return llaves;
   // 1) Variables de entorno (recomendado en el hosting)
-  if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
-    llaves = { publica: process.env.VAPID_PUBLIC_KEY, privada: process.env.VAPID_PRIVATE_KEY, origen: 'variables de entorno' };
-  } else {
+  // Limpia lo que se pega por error: espacios, comillas, saltos de línea o "Value:"
+  const limpiar = v => String(v || '').replace(/^\s*(value|valor)\s*:\s*/i, '').replace(/["'\s]/g, '').replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
+  const envPub = limpiar(process.env.VAPID_PUBLIC_KEY);
+  const envPriv = limpiar(process.env.VAPID_PRIVATE_KEY);
+  if (envPub && envPriv) {
+    llaves = { publica: envPub, privada: envPriv, origen: 'variables de entorno' };
+    try { prepararPrivada(llaves); return llaves; } catch (e) {
+      console.warn('[push] VAPID_PUBLIC_KEY / VAPID_PRIVATE_KEY no son válidas (' + e.message + '). Revisa que sean el par de VARIABLES_RENDER.txt. Se usan llaves temporales.');
+      llaves = null;
+    }
+  }
+  {
     // 2) Archivo database/vapid.json (se crea solo la primera vez)
     try {
       const guardadas = JSON.parse(fs.readFileSync(ARCHIVO_LLAVES, 'utf8'));
@@ -47,12 +56,25 @@ function cargarLlaves() {
       llaves.origen = 'database/vapid.json (generadas)';
     }
   }
-  const pub = deB64u(llaves.publica);
-  llaves.objetoPrivado = crypto.createPrivateKey({
-    format: 'jwk',
-    key: { kty: 'EC', crv: 'P-256', d: llaves.privada, x: b64u(pub.subarray(1, 33)), y: b64u(pub.subarray(33, 65)) }
-  });
+  try { prepararPrivada(llaves); } catch (e) {
+    // Archivo dañado: se generan llaves nuevas en memoria para que el servidor siga funcionando
+    console.warn('[push] Llaves de ' + llaves.origen + ' inválidas (' + e.message + '). Se generan nuevas.');
+    const ecdh = crypto.createECDH('prime256v1');
+    ecdh.generateKeys();
+    llaves = { publica: b64u(ecdh.getPublicKey()), privada: b64u(ecdh.getPrivateKey()), origen: 'temporales (en memoria)' };
+    prepararPrivada(llaves);
+  }
   return llaves;
+}
+
+function prepararPrivada(l) {
+  const pub = deB64u(l.publica);
+  if (pub.length !== 65 || pub[0] !== 4) throw new Error('la llave pública debe medir 65 bytes');
+  if (deB64u(l.privada).length !== 32) throw new Error('la llave privada debe medir 32 bytes');
+  l.objetoPrivado = crypto.createPrivateKey({
+    format: 'jwk',
+    key: { kty: 'EC', crv: 'P-256', d: l.privada, x: b64u(pub.subarray(1, 33)), y: b64u(pub.subarray(33, 65)) }
+  });
 }
 
 const clavePublica = () => cargarLlaves().publica;
