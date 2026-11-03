@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#065f46">
+  <meta name="description" content="CampusCare: plataforma institucional para reportar y dar seguimiento a incidencias de infraestructura universitaria.">
+  <title>CampusCare · Mantenimiento Universitario</title>
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="CampusCare">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- =====================================================
+       PANTALLA DE INICIO DE SESIÓN (RF-01)
+       ===================================================== -->
+  <section id="login" class="login">
+    <div class="login-hero">
+      <div class="hero-pattern"></div>
+      <div class="login-hero-inner">
+        <div class="brand brand-on-dark">
+          <span class="logo-box"><span class="logo-fallback">CC</span><img src="img/logo.png" alt="Logo institucional" onerror="this.remove()"></span>
+          <span class="brand-text"><strong>CampusCare</strong><small>Mantenimiento universitario</small></span>
+        </div>
+
+        <div class="hero-copy">
+          <span class="pill pill-glass">Plataforma institucional</span>
+          <h1>Un campus en óptimas condiciones, <span class="hl">reportado en segundos.</span></h1>
+          <p>Levanta incidencias de infraestructura, da seguimiento en tiempo real y consulta la evidencia de cada solución desde cualquier dispositivo.</p>
+          <ul class="hero-features">
+            <li><span data-icon="camera"></span>Reporte con fotografía y ubicación exacta</li>
+            <li><span data-icon="bell"></span>Avisos automáticos en cada cambio de estado</li>
+            <li><span data-icon="chart"></span>Métricas de MTTR y cumplimiento de SLA</li>
+          </ul>
+        </div>
+
+        <div class="hero-stats">
+          <div><strong id="heroStat1">0</strong><span>reportes atendidos</span></div>
+          <div><strong id="heroStat2">0%</strong><span>dentro de SLA</span></div>
+          <div><strong id="heroStat3">4</strong><span>edificios conectados</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="login-panel">
+      <form id="loginForm" class="login-card" novalidate>
+        <div class="brand brand-mobile">
+          <span class="logo-box"><span class="logo-fallback">CC</span><img src="img/logo.png" alt="" onerror="this.remove()"></span>
+          <span class="brand-text"><strong>CampusCare</strong><small>Mantenimiento universitario</small></span>
+        </div>
+
+        <div>
+          <h2>Iniciar sesión</h2>
+          <p class="muted">Accede con tu cuenta institucional.</p>
+        </div>
+
+        <label class="field">
+          <span>Correo institucional</span>
+          <div class="input-icon">
+            <span data-icon="user"></span>
+            <input type="email" id="loginEmail" placeholder="usuario@institucion.edu.mx" autocomplete="username" required>
+          </div>
+        </label>
+
+        <label class="field">
+          <span>Contraseña</span>
+          <div class="input-icon">
+            <span data-icon="lock"></span>
+            <input type="password" id="loginPass" placeholder="Ingresa tu contraseña" autocomplete="current-password" required>
+            <button type="button" class="input-btn" data-action="toggle-pass" aria-label="Mostrar contraseña"><span data-icon="eye"></span></button>
+          </div>
+        </label>
+
+        <div id="loginError" class="alert alert-error" hidden></div>
+
+        <button class="btn btn-primary btn-block btn-lg" type="submit">Entrar <span data-icon="arrow"></span></button>
+
+        <div class="divider"><span>Cuentas de demostración</span></div>
+
+        <div class="demo-grid">
+          <button type="button" class="demo-btn" data-action="demo" data-email="alumno@institucion.edu.mx">
+            <span data-icon="user"></span><strong>Alumno / Docente</strong><small>alumno@</small>
+          </button>
+          <button type="button" class="demo-btn" data-action="demo" data-email="tecnico@institucion.edu.mx">
+            <span data-icon="wrench"></span><strong>Mantenimiento</strong><small>tecnico@</small>
+          </button>
+          <button type="button" class="demo-btn" data-action="demo" data-email="admin@institucion.edu.mx">
+            <span data-icon="shield"></span><strong>Administrador</strong><small>admin@</small>
+          </button>
+        </div>
+
+        <p class="tiny muted center">Contraseña de demostración: <code>Campus2026</code><br>Sesión protegida con token JWT (vigencia de 8 horas)</p>
+        <p class="small center">¿No tienes cuenta? <button type="button" class="link" data-action="mostrar-registro">Crear cuenta institucional</button></p>
+      </form>
+
+      <!-- REGISTRO DE CUENTA: crea un registro en la tabla "usuarios" -->
+      <form id="registroForm" class="login-card" novalidate hidden>
+        <div class="brand brand-mobile">
+          <span class="logo-box"><span class="logo-fallback">CC</span><img src="img/logo.png" alt="" onerror="this.remove()"></span>
+          <span class="brand-text"><strong>CampusCare</strong><small>Mantenimiento universitario</small></span>
+        </div>
+        <div>
+          <h2>Crear cuenta</h2>
+          <p class="muted">Regístrate con tu correo institucional. Tu cuenta tendrá el rol de Alumno / Docente.</p>
+        </div>
+        <label class="field">
+          <span>Nombre completo</span>
+          <div class="input-icon"><span data-icon="user"></span><input type="text" id="regNombre" placeholder="Ej. Aldo Leal Palafox" autocomplete="name" maxlength="80" required></div>
+        </label>
+        <label class="field">
+          <span>Correo institucional</span>
+          <div class="input-icon"><span data-icon="send"></span><input type="email" id="regEmail" placeholder="usuario@institucion.edu.mx" autocomplete="email" required></div>
+        </label>
+        <label class="field">
+          <span>Contraseña</span>
+          <div class="input-icon"><span data-icon="lock"></span><input type="password" id="regPass" placeholder="Mínimo 8 caracteres, con letras y números" autocomplete="new-password" required></div>
+        </label>
+        <label class="field">
+          <span>Confirmar contraseña</span>
+          <div class="input-icon"><span data-icon="lock"></span><input type="password" id="regPass2" placeholder="Repite la contraseña" autocomplete="new-password" required></div>
+        </label>
+        <div class="alert alert-error" hidden></div>
+        <button class="btn btn-primary btn-block btn-lg" type="submit">Crear cuenta <span data-icon="arrow"></span></button>
+        <p class="small center">¿Ya tienes cuenta? <button type="button" class="link" data-action="mostrar-login">Iniciar sesión</button></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- =====================================================
+       APLICACIÓN (se muestra al iniciar sesión)
+       ===================================================== -->
+  <div id="app" class="app" hidden>
+    <aside class="sidebar">
+      <div class="brand brand-on-dark">
+        <span class="logo-box"><span class="logo-fallback">CC</span><img src="img/logo.png" alt="" onerror="this.remove()"></span>
+        <span class="brand-text"><strong>CampusCare</strong><small>Mantenimiento universitario</small></span>
+      </div>
+      <div class="sidebar-role" id="sideRole"></div>
+      <nav id="sideNav" class="side-nav" aria-label="Navegación principal"></nav>
+      <div class="side-help">
+        <span data-icon="alert"></span>
+        <strong>¿Riesgo inmediato?</strong>
+        <p>Ante fugas de gas, incendio o riesgo eléctrico llama a Protección Civil: <b>ext. 1100</b></p>
+      </div>
+      <button class="side-logout" data-action="logout"><span data-icon="logout"></span>Cerrar sesión</button>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <span class="logo-box logo-sm mobile-only"><span class="logo-fallback">CC</span><img src="img/logo.png" alt="" onerror="this.remove()"></span>
+          <div class="topbar-titles">
+            <p class="kicker" id="viewKicker"></p>
+            <h1 id="viewTitle">Inicio</h1>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <div class="bell-wrap">
+            <button class="icon-btn" id="bellBtn" data-action="toggle-bell" aria-label="Notificaciones">
+              <span data-icon="bell"></span><span class="badge" id="bellCount" hidden>0</span>
+            </button>
+            <div class="notif-panel" id="notifPanel" hidden></div>
+          </div>
+          <div class="user-chip">
+            <span class="avatar" id="userAvatar"></span>
+            <span class="user-meta"><strong id="userName"></strong><small id="userRole"></small></span>
+          </div>
+          <button class="icon-btn mobile-only" data-action="logout" aria-label="Cerrar sesión"><span data-icon="logout"></span></button>
+        </div>
+      </header>
+
+      <main id="view" class="view" tabindex="-1"></main>
+
+      <footer class="app-footer">© 2026 Universidad · CampusCare — Dirección de Infraestructura y Servicios Generales</footer>
+    </div>
+
+    <nav id="bottomNav" class="bottom-nav" aria-label="Navegación móvil"></nav>
+  </div>
+
+  <!-- Ventana modal reutilizable -->
+  <div id="modal" class="modal" hidden>
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-card" role="dialog" aria-modal="true">
+      <button class="modal-close" data-close aria-label="Cerrar"><span data-icon="x"></span></button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- Contenedor de avisos emergentes -->
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+  <script src="admin.js"></script>
+  <script src="pwa.js"></script>
+  <script src="mapacalor.js"></script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+{
+  "id": "/",
+  "name": "CampusCare · Mantenimiento Universitario",
+  "short_name": "CampusCare",
+  "description": "Reporta incidencias de infraestructura del campus y analiza las zonas con más fallas en el mapa de calor.",
+  "lang": "es-MX",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "any",
+  "background_color": "#022c22",
+  "theme_color": "#065f46",
+  "categories": [
+    "education",
+    "productivity",
+    "utilities"
+  ],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Mapa de calor",
+      "short_name": "Mapa",
+      "description": "Abrir el mapa de calor de incidencias",
+      "url": "/#mapacalor",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Reportar incidencia",
+      "short_name": "Reportar",
+      "url": "/#reportar",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "icons/screenshots/mapa-escritorio.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Mapa de calor de incidencias en escritorio"
+    },
+    {
+      "src": "icons/screenshots/mapa-movil.png",
+      "sizes": "780x1688",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Mapa de calor en el celular"
+    }
+  ]
+}

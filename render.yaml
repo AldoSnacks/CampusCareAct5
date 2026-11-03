@@ -1,0 +1,14 @@
+# Configuración para publicar CampusCare en Render (https://render.com)
+# En Render: New → Blueprint → elige tu repositorio de GitHub.
+services:
+  - type: web
+    name: campuscare
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/salud
+    autoDeploy: true
+    envVars:
+      - key: JWT_SECRET
+        generateValue: true   # Render crea una clave secreta segura para firmar los tokens
